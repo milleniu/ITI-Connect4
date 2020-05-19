@@ -20,6 +20,7 @@ type Startup private () =
         }
 
         services
+            .AddMemoryCache()
             .AddSingleton<Connect4ServiceDependency>(connect4ServiceDependency)
             .AddControllers()
         |> ignore
