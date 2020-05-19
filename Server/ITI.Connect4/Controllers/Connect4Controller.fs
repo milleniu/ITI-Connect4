@@ -21,3 +21,11 @@ type Connect4Controller ( connect4Service: Connect4ServiceDependency,
         match newGame cache (Guid.NewGuid()) with
         | Ok id -> __.Ok( id ) :> IActionResult
         | Error e -> logger.LogError e; __.BadRequest( e ) :> IActionResult
+
+    [<HttpGet>]
+    [<Route("{id}")>]
+    member __.GetGame(id: Guid) = 
+        let { GetGame = getGame } = connect4Service
+        match getGame cache id with
+        | Ok boardState -> __.Ok( boardState ) :> IActionResult
+        | Error e -> logger.LogError e; __.BadRequest( e.ToString() ) :> IActionResult

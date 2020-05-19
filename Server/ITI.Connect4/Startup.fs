@@ -17,6 +17,7 @@ type Startup private () =
         // Add framework services.
         let connect4ServiceDependency = {
             NewGame = Connect4Service.newGame
+            GetGame = Connect4Service.getGame
         }
 
         services

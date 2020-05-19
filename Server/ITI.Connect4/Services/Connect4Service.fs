@@ -6,6 +6,7 @@ open ITI.Connect4.Models
 
 type Connect4ServiceDependency = {
     NewGame : IMemoryCache -> Guid -> Result<Guid, string>
+    GetGame : IMemoryCache -> Guid -> Result<BoardState, string>
 }
 
 module Connect4Service =
@@ -17,3 +18,8 @@ module Connect4Service =
             let newBoardState = { Board = newBoard; Turn = Red }
             cache.Set( id, newBoardState, TimeSpan.FromDays (float 1) ) |> ignore
             Ok id
+
+    let getGame (cache: IMemoryCache) (id: Guid) : Result<BoardState, string> =
+        match cache.TryGetValue id with
+        | true, boardState -> Ok (boardState :?> BoardState)
+        | _ -> Error ( sprintf "Game %s does not exists" (id.ToString() ) )
