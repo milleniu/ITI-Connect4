@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Compile Include="Models\Connect4.fs" />
+    <Compile Include="Models\ViewModels.fs" />
     <Compile Include="Services\Connect4Service.fs" />
     <Compile Include="Controllers\Connect4Controller.fs" />
     <Compile Include="Startup.fs" />
