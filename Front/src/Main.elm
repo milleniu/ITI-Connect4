@@ -51,8 +51,9 @@ type alias Case =
 type CaseState
   = Empty
   | PlayerOne
-  | PlayerTwocaseString : CaseState -> String
+  | PlayerTwo
 
+caseString : CaseState -> String
 caseString caseState = 
   case caseState of 
     Empty -> 
@@ -60,8 +61,9 @@ caseString caseState =
     PlayerOne -> 
       "PlayerOne"
     PlayerTwo -> 
-      "PlayerTwo"update : Msg -> Model -> Model
+      "PlayerTwo"
 
+update : Msg -> Model -> Model
 update msg model =
   case msg of
     NewGame -> 
@@ -69,8 +71,16 @@ update msg model =
       (createModel "0")
     AddPawn id ->
       Debug.log(String.fromInt(id))
-      (createModel "ATTENTION ADDPAWN PAS NEW GAME")createModel gameID =
-  { gameId = gameID,  board =[ [ Empty, Empty, Empty, Empty, Empty, Empty ],[ Empty, Empty, Empty, Empty, Empty, Empty ],[ Empty, Empty, Empty, Empty, Empty, Empty ],[ Empty, Empty, Empty, Empty, Empty, Empty ],[ Empty, Empty, Empty, Empty, Empty, Empty ],[ Empty, Empty, Empty, Empty, Empty, Empty ],[ Empty, Empty, Empty, Empty, Empty, Empty ]] }-- VIEW   view : Model -> Html Msg
+      (createModel "ATTENTION ADDPAWN PAS NEW GAME")
+
+createModel gameID =
+  { gameId = gameID,  board =[ [ Empty, Empty, Empty, Empty, Empty, Empty ],[ Empty, Empty, Empty, Empty, Empty, Empty ],[ Empty, Empty, Empty, Empty, Empty, Empty ],[ Empty, Empty, Empty, Empty, Empty, Empty ],[ Empty, Empty, Empty, Empty, Empty, Empty ],[ Empty, Empty, Empty, Empty, Empty, Empty ],[ Empty, Empty, Empty, Empty, Empty, Empty ]] }
+         
+
+
+-- VIEW   
+
+view : Model -> Html Msg
 view model =
   div [ ]
     [ button
@@ -87,5 +97,7 @@ view model =
                                               ]
                                               [ 
                                                 li [] []
-                                              ]) elm)          ) model.board)
+                                              ]) elm)
+                                          
+          ) model.board)
     ]
