@@ -27,6 +27,7 @@ type Startup private () =
             .AddSingleton<ViewModelConverterDependency>({
                 PlayerAsViewModel = ViewModelConverter.playerAsViewModel
                 BoardStateAsViewModel = ViewModelConverter.boardStateAsViewModel
+                GameIdentifierAsViewModel = ViewModelConverter.gameIdentifierAsViewModel
                 PlayerFromViewModel = ViewModelConverter.playerFromViewModel
             })
             .AddControllers()

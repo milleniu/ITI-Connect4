@@ -22,19 +22,19 @@ type Connect4Controller ( logger : ILogger<Connect4Controller>,
     member __.NewGame() =
         let createNewGamePipeline =
             gameManager.CreateNewBoardState Red
-            |> persistence.Set cache (Guid.NewGuid())
+            |> persistence.Set cache (GameIdentifier.NewGuid())
 
         match createNewGamePipeline with
         | Ok id ->
             logger.LogTrace ( sprintf "Created game %s" (id.ToString()) )
-            __.Ok( id ) :> IActionResult
+            ( id |> converter.GameIdentifierAsViewModel |> __.Ok ) :> IActionResult
         | Error e ->
             logger.LogError e
             __.BadRequest( e ) :> IActionResult
 
     [<HttpGet>]
     [<Route("{id}")>]
-    member __.GetGame (id: Guid) =
+    member __.GetGame (id: GameIdentifier) =
         let getGamePipeline = 
             persistence.Get cache id
 

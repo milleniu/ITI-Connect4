@@ -5,17 +5,17 @@ open Microsoft.Extensions.Caching.Memory
 open ITI.Connect4.Models
 
 type PersistenceServiceDependency = {
-    Get : IMemoryCache -> Guid -> Result<BoardState, string>
-    Set : IMemoryCache -> Guid -> BoardState -> Result<Guid, string>
+    Get : IMemoryCache -> GameIdentifier -> Result<BoardState, string>
+    Set : IMemoryCache -> GameIdentifier -> BoardState -> Result<GameIdentifier, string>
 }
 
 module PersistenceService =
-    let get (cache: IMemoryCache) (id: Guid) : Result<BoardState, string> =
+    let get (cache: IMemoryCache) (id: GameIdentifier) : Result<BoardState, string> =
         match cache.TryGetValue id with
         | true, boardState -> Ok ( boardState :?> BoardState )
         | _ -> Error ( sprintf "Game %s does not exists" (id.ToString() ) )
 
-    let set (cache: IMemoryCache) (id: Guid) (data: BoardState): Result<Guid, string> =
+    let set (cache: IMemoryCache) (id: GameIdentifier) (data: BoardState): Result<GameIdentifier, string> =
         match cache.TryGetValue id with
         | true, _ -> Error ( sprintf "Game %s already exists" ( id.ToString() ) )
         | _ ->
