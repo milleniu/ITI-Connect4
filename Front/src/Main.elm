@@ -113,57 +113,119 @@ updateGameState : Model -> String -> Model
 updateGameState model gameState = 
   { gameId = model.gameId,  board = model.board, turn = model.turn, error = model.error, gameState = gameState}
 
--- todo
-type CaseState
-  = Empty
-  | PlayerOne
-  | PlayerTwo
-
-caseString : CaseState -> String
-caseString caseState = 
-  case caseState of 
-    Empty -> 
-      "Empty"
-    PlayerOne -> 
-      "PlayerOne"
-    PlayerTwo -> 
-      "PlayerTwo"
-
-update : Msg -> Model -> Model
-update msg model =
-  case msg of
-    NewGame -> 
-      Debug.log("Click")
-      (createModel "0")
-    AddPawn id ->
-      Debug.log(String.fromInt(id))
-      (createModel "ATTENTION ADDPAWN PAS NEW GAME")
-
+createModel : String -> Model
 createModel gameID =
-  { gameId = gameID,  board =[ [ Empty, Empty, Empty, Empty, Empty, Empty ],[ Empty, Empty, Empty, Empty, Empty, Empty ],[ Empty, Empty, Empty, Empty, Empty, Empty ],[ Empty, Empty, Empty, Empty, Empty, Empty ],[ Empty, Empty, Empty, Empty, Empty, Empty ],[ Empty, Empty, Empty, Empty, Empty, Empty ],[ Empty, Empty, Empty, Empty, Empty, Empty ]] }
-         
+  { 
+    gameId = gameID,
+    board = [ 
+      [ Empty, Empty, Empty, Empty, Empty, Empty ],
+      [ Empty, Empty, Empty, Empty, Empty, Empty ],
+      [ Empty, Empty, Empty, Empty, Empty, Empty ],
+      [ Empty, Empty, Empty, Empty, Empty, Empty ],
+      [ Empty, Empty, Empty, Empty, Empty, Empty ],
+      [ Empty, Empty, Empty, Empty, Empty, Empty ],
+      [ Empty, Empty, Empty, Empty, Empty, Empty ]
+    ],
+    turn = Yellow,
+    error = "",
+    gameState = ""
+  }
+
+updateTurn : Model -> Model 
+updateTurn model = 
+  case model.turn of 
+    Yellow -> { gameId = model.gameId,  board = model.board, turn = Red, error = model.error, gameState = model.gameState}
+    _ -> { gameId = model.gameId,  board = model.board, turn = Yellow, error = model.error, gameState = model.gameState }
+
+humanize : Model -> String
+humanize model = 
+  if String.contains "Winner" model.gameState then
+    model.gameState
+  else
+    "It' s " ++ caseString model.turn ++ " to play"
+
+addErrorModel: Model -> String -> Model
+addErrorModel model err = 
+  { gameId = model.gameId,  board = model.board, turn = model.turn , error = err, gameState = model.gameState}
 
 
--- VIEW   
+-- HTTP
+
+putPlay : Model -> Int -> Cmd Msg
+putPlay model column = 
+  Http.post 
+  { url = "http://146m5.mocklab.io/api/connect4/" ++  model.gameId ++ "/" ++ caseString model.turn ++ "/" ++ String.fromInt column,
+    body = Http.emptyBody,
+    expect = Http.expectJson PutPlay putPlayDecoder
+  }
+
+putPlayDecoder : Decoder String
+putPlayDecoder = 
+  field "gameState" string
+
+getGame : Cmd Msg
+getGame =
+  Http.get
+    { url = "http://146m5.mocklab.io/api/connect4/newgame" -- get game
+    , expect = Http.expectJson GetGame getGameDecoder
+    }
+
+getGameDecoder : Decoder String
+getGameDecoder = 
+  field "id" string
+
+getGrid : Model -> Cmd Msg
+getGrid model = 
+  Http.post 
+  { url = "http://146m5.mocklab.io/api/connect4/" ++  model.gameId ,
+    body = Http.emptyBody,
+    expect = Http.expectJson GetGrid getGridDecoder
+  }
+
+getGridDecoder : Decoder (List (List State))
+getGridDecoder = 
+  field "board" ( Json.Decode.list ( Json.Decode.list stateDecoder) )
+
+stateDecoder : Decoder State
+stateDecoder = 
+  Json.Decode.string
+        |> Json.Decode.andThen (\str ->
+           case str of
+                "Red" ->
+                  Json.Decode.succeed Red
+                "Yellow" ->
+                  Json.Decode.succeed Yellow
+                "Empty" ->
+                  Json.Decode.succeed Empty
+                err ->
+                    Json.Decode.fail <| "Unknown state: " ++ err
+        )
+  
+-- VIEW    
 
 view : Model -> Html Msg
 view model =
   div [ ]
-    [ button
-        [ class "buttons", onClick NewGame ] [text "New Game" ]
+    [
+      div 
+      [class "message"] [text (humanize model)]
     , div 
-        [ class "gridContainer"
-        , style "display" "flex"
-        ]
-        (List.indexedMap (\i elm -> div 
-                            [ class "column", onClick (AddPawn i) ]
-                            (List.map(\n -> div
-                                              [ 
-                                                class (caseString n)
-                                              ]
-                                              [ 
-                                                li [] []
-                                              ]) elm)
-                                          
-          ) model.board)
+      [class "error"] [text model.error]
+    , button
+      [ class "buttons", onClick NewGame ] [text "New Game" ]
+    , div 
+      [ class "gridContainer"
+      , style "display" "flex"
+      ]
+      (List.indexedMap (\i elm -> div 
+                          [ class "column", onClick (AddPawn i) ]
+                          (List.map(\n -> div
+                                            [ 
+                                              class (caseString n)
+                                            ]
+                                            [ 
+                                              li [] []
+                                            ]) elm)
+                                        
+        ) model.board)
     ]
