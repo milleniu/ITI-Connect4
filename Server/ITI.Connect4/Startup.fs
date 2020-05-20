@@ -19,9 +19,12 @@ type Startup private () =
             .AddMemoryCache()
             .AddSingleton<GameManagerDependency>({
                 CreateNewBoardState = GameManager.createNewBoardState
+                PutChip = GameManager.putChip
+                EvaluateBoad = GameManager.evaluateBoard
             })
             .AddSingleton<PersistenceServiceDependency>({
                 Get = PersistenceService.get
+                Exist = PersistenceService.exist
                 Set = PersistenceService.set
             })
             .AddSingleton<ViewModelConverterDependency>({

@@ -6,6 +6,7 @@ open ITI.Connect4.Models
 
 type PersistenceServiceDependency = {
     Get : IMemoryCache -> GameIdentifier -> Result<BoardState, string>
+    Exist : IMemoryCache -> GameIdentifier -> bool
     Set : IMemoryCache -> GameIdentifier -> BoardState -> Result<GameIdentifier, string>
 }
 
@@ -15,10 +16,12 @@ module PersistenceService =
         | true, boardState -> Ok ( boardState :?> BoardState )
         | _ -> Error ( sprintf "Game %s does not exists" (id.ToString() ) )
 
-    let set (cache: IMemoryCache) (id: GameIdentifier) (data: BoardState): Result<GameIdentifier, string> =
+    let exist (cache: IMemoryCache) (id: GameIdentifier) : bool =
         match cache.TryGetValue id with
-        | true, _ -> Error ( sprintf "Game %s already exists" ( id.ToString() ) )
-        | _ ->
-            cache.Set( id, data, TimeSpan.FromDays (float 1) ) |> ignore
-            Ok id
+         | true, _ -> true
+         | _ -> false
+
+    let set (cache: IMemoryCache) (id: GameIdentifier) (data: BoardState): Result<GameIdentifier, string> =
+        cache.Set( id, data, TimeSpan.FromDays (float 1) ) |> ignore
+        Ok id            
         

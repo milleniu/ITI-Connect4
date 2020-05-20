@@ -14,18 +14,19 @@ type ViewModelConverterDependency = {
 module ViewModelConverter =
     let playerAsViewModel (player: Player) : PlayerViewModel =
         match player with
-        | Yellow -> "yellow"
-        | Red -> "red"
+        | Yellow -> "Yellow"
+        | Red -> "Red"
 
     let boardStateAsViewModel ({ Board = board; Turn = turn } : BoardState) : BoardStateViewModel =
-        let boardViewModel: BoardViewModel =
+        let boardViewModel =
             board
-            |> Seq.map (fun (column: BoardColumn) ->
+            |> Seq.map (fun column ->
                 column
-                |> Seq.map (fun (cell: BoardCell) -> 
+                |> Seq.map (fun cell -> 
                     match cell with
                     | None -> "Empty"
                     | Some player -> player |> playerAsViewModel)
+                |> Seq.rev
                 |> Seq.toArray)
             |> Seq.toArray
 
@@ -36,6 +37,6 @@ module ViewModelConverter =
 
     let playerFromViewModel (playerViewModel: PlayerViewModel) : Result<Player, string> =
         match playerViewModel with
-        | "yellow" -> Ok Yellow
-        | "red" -> Ok Red
+        | "Yellow" -> Ok Yellow
+        | "Red" -> Ok Red
         | _ -> Error (sprintf "Invalid player %s" playerViewModel)
