@@ -21,6 +21,11 @@ type Startup private () =
                 NewGame = GameService.newGame
                 GetGame = GameService.getGame
             })
+            .AddSingleton<ViewModelConverterDependency>({
+                PlayerAsViewModel = ViewModelConverter.playerAsViewModel
+                BoardStateAsViewModel = ViewModelConverter.boardStateAsViewModel
+                PlayerFromViewModel = ViewModelConverter.playerFromViewModel
+            })
             .AddControllers()
         |> ignore
 

@@ -8,6 +8,7 @@
     <Compile Include="Models\Game.fs" />
     <Compile Include="Models\ViewModels.fs" />
     <Compile Include="Services\GameService.fs" />
+    <Compile Include="Services\ViewModelConverter.fs" />
     <Compile Include="Controllers\GameController.fs" />
     <Compile Include="Startup.fs" />
     <Compile Include="Program.fs" />

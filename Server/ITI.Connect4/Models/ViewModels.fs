@@ -3,5 +3,5 @@
 type BoardCellViewModel = string
 type BoardColumnViewModel = BoardCellViewModel array
 type BoardViewModel = BoardColumnViewModel array
-type TurnViewModel = string
-type BoardStateViewModel = { Board: BoardViewModel; Turn: TurnViewModel }
+type PlayerViewModel = string
+type BoardStateViewModel = { Board: BoardViewModel; Turn: PlayerViewModel }
