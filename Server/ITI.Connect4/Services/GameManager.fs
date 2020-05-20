@@ -44,4 +44,22 @@ module GameManager =
             | None -> Error (sprintf "No space left in column %d" column))
 
     let evaluateBoard (board: Board) : GameState =
-        Running (* TODO *)
+        let winningConditions = [ ]
+            //match (i, j)
+            //if board.[j].[i] = board.[j].[i+1] && board.[j].[i] = board.[j].[i+2] && board.[j].[i] = board.[j].[i+3]
+            //    then match board.[j].[i] with Some p -> Win p | None -> Running
+            //    else Running))
+
+        let checkAt col row : Player option =
+            None
+
+        seq {
+            for col in 0..(BoardHeight - 1) do
+                for row in 0..(BoardWidth - 1) do
+                    if (checkAt col row |> Option.isSome) then Running (* Win of Player *) }
+        |> Seq.fold (fun a b ->
+            match (a, b) with
+            | (Win _ as win), _ -> win
+            | _, (Win _ as win) -> win
+            | _ -> Running ) Running
+            
