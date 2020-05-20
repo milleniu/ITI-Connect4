@@ -17,9 +17,12 @@ type Startup private () =
         // Add framework services.
         services
             .AddMemoryCache()
-            .AddSingleton<GameServiceDependency>({
-                NewGame = GameService.newGame
-                GetGame = GameService.getGame
+            .AddSingleton<GameManagerDependency>({
+                CreateNewBoardState = GameManager.createNewBoardState
+            })
+            .AddSingleton<PersistenceServiceDependency>({
+                Get = PersistenceService.get
+                Set = PersistenceService.set
             })
             .AddSingleton<ViewModelConverterDependency>({
                 PlayerAsViewModel = ViewModelConverter.playerAsViewModel
