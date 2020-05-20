@@ -18,3 +18,28 @@ html, body {
 .column {
     background-color: #002AE0;
 }
+
+.column div {
+    height: 100px;
+    width: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.column div li {
+    content: open-quote;
+    width: 80px !important;
+    height: 80px;
+    background-color: #fff;
+    border-radius: 50%;
+    list-style: none;
+    border: 6px solid rgb(0, 26, 139);
+}
+
+.Red li {
+    background-color: #FF0000 !important;
+}
+.Yellow li {
+    background-color: #FFAE00 !important;
+}
