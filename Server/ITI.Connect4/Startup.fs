@@ -15,14 +15,12 @@ type Startup private () =
     // This method gets called by the runtime. Use this method to add services to the container.
     member this.ConfigureServices(services: IServiceCollection) =
         // Add framework services.
-        let connect4ServiceDependency = {
-            NewGame = Connect4Service.newGame
-            GetGame = Connect4Service.getGame
-        }
-
         services
             .AddMemoryCache()
-            .AddSingleton<Connect4ServiceDependency>(connect4ServiceDependency)
+            .AddSingleton<GameServiceDependency>({
+                NewGame = GameService.newGame
+                GetGame = GameService.getGame
+            })
             .AddControllers()
         |> ignore
 

@@ -7,8 +7,8 @@ open Microsoft.Extensions.Logging
 open ITI.Connect4.Services
 
 [<ApiController>]
-[<Route("api/[controller]")>]
-type Connect4Controller ( connect4Service: Connect4ServiceDependency,
+[<Route("api/connect4")>]
+type Connect4Controller ( connect4Service: GameServiceDependency,
     logger : ILogger<Connect4Controller>,
     cache : IMemoryCache ) =
 
@@ -19,13 +19,20 @@ type Connect4Controller ( connect4Service: Connect4ServiceDependency,
     member __.NewGame() =
         let { NewGame = newGame } = connect4Service
         match newGame cache (Guid.NewGuid()) with
-        | Ok id -> __.Ok( id ) :> IActionResult
-        | Error e -> logger.LogError e; __.BadRequest( e ) :> IActionResult
+        | Ok id ->
+            logger.LogTrace ( sprintf "Created game %s" (id.ToString()) )
+            __.Ok( id ) :> IActionResult
+        | Error e ->
+            logger.LogError e
+            __.BadRequest( e ) :> IActionResult
 
     [<HttpGet>]
     [<Route("{id}")>]
-    member __.GetGame(id: Guid) = 
+    member __.GetGame (id: Guid) = 
         let { GetGame = getGame } = connect4Service
         match getGame cache id with
-        | Ok boardState -> __.Ok( boardState ) :> IActionResult
-        | Error e -> logger.LogError e; __.BadRequest( e.ToString() ) :> IActionResult
+        | Ok boardState ->
+            __.Ok( boardState ) :> IActionResult
+        | Error e -> 
+            logger.LogError e;
+            __.BadRequest( e ) :> IActionResult

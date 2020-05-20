@@ -4,12 +4,12 @@ open System
 open Microsoft.Extensions.Caching.Memory
 open ITI.Connect4.Models
 
-type Connect4ServiceDependency = {
+type GameServiceDependency = {
     NewGame : IMemoryCache -> Guid -> Result<Guid, string>
     GetGame : IMemoryCache -> Guid -> Result<BoardStateViewModel, string>
 }
 
-module Connect4Service =
+module GameService =
     let newGame (cache: IMemoryCache) (id: Guid) : Result<Guid, string> =
         match cache.TryGetValue id with
         | true, _ -> Error ( sprintf "Game %s already exists" ( id.ToString() ) )

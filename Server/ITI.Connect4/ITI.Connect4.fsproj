@@ -5,10 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Models\Connect4.fs" />
+    <Compile Include="Models\Game.fs" />
     <Compile Include="Models\ViewModels.fs" />
-    <Compile Include="Services\Connect4Service.fs" />
-    <Compile Include="Controllers\Connect4Controller.fs" />
+    <Compile Include="Services\GameService.fs" />
+    <Compile Include="Controllers\GameController.fs" />
     <Compile Include="Startup.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
