@@ -126,7 +126,7 @@ createModel gameID =
       [ Empty, Empty, Empty, Empty, Empty, Empty ],
       [ Empty, Empty, Empty, Empty, Empty, Empty ]
     ],
-    turn = Yellow,
+    turn = Red,
     error = "",
     gameState = ""
   }
@@ -154,7 +154,7 @@ addErrorModel model err =
 putPlay : Model -> Int -> Cmd Msg
 putPlay model column = 
   Http.post 
-  { url = "http://146m5.mocklab.io/api/connect4/" ++  model.gameId ++ "/" ++ caseString model.turn ++ "/" ++ String.fromInt column,
+  { url = "/api/connect4/" ++  model.gameId ++ "/" ++ caseString model.turn ++ "/" ++ String.fromInt column,
     body = Http.emptyBody,
     expect = Http.expectJson PutPlay putPlayDecoder
   }
@@ -165,8 +165,9 @@ putPlayDecoder =
 
 getGame : Cmd Msg
 getGame =
-  Http.get
-    { url = "http://146m5.mocklab.io/api/connect4/newgame" -- get game
+  Http.post
+    { url = "/api/connect4/new" -- get game
+    , body = Http.emptyBody
     , expect = Http.expectJson GetGame getGameDecoder
     }
 
@@ -176,9 +177,8 @@ getGameDecoder =
 
 getGrid : Model -> Cmd Msg
 getGrid model = 
-  Http.post 
-  { url = "http://146m5.mocklab.io/api/connect4/" ++  model.gameId ,
-    body = Http.emptyBody,
+  Http.get 
+  { url = "/api/connect4/" ++  model.gameId ,
     expect = Http.expectJson GetGrid getGridDecoder
   }
 

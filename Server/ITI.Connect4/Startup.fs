@@ -47,6 +47,8 @@ type Startup private () =
         app
             .UseRouting()
             .UseAuthorization()
+            .UseDefaultFiles()
+            .UseStaticFiles()
             .UseEndpoints(fun endpoints -> endpoints.MapControllers() |> ignore)
         |> ignore
 
