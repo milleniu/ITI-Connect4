@@ -2,19 +2,24 @@ namespace ITI.Connect4.Models
 
 open System
 
-type Player =
-    | Red
-    | Yellow
+type Column = int
+type Row = int
+type Coordinate = Column * Row
 
+type Player = Red | Yellow
 type BoardCell = Player option
 type BoardColumn = BoardCell array
 type Board = BoardColumn array
 type BoardState = { Board: Board; Turn: Player }
 
-// TODO: Use single case union ?
-type GameIdentifier = Guid
+type GameIdentifier = GameIdentifier of Guid
+type GameState = Running | Draw | Win of Player
+type GameWinningCondition = GameWinningCondition of (Column -> Row -> Player option)
 
-type GameState = 
-    | Running
-    | Draw
-    | Win of Player
+[<Sealed>]
+module Constants =
+    [<Literal>]
+    let BoardWidth = 7
+
+    [<Literal>]
+    let BoardHeight = 6

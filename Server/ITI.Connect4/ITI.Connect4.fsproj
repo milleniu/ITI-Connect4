@@ -5,9 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Models\Logical.fs" />
     <Compile Include="Models\Game.fs" />
     <Compile Include="Models\ViewModels.fs" />
+    <Compile Include="Models\Abstractions.fs" />
     <Compile Include="Services\GameManager.fs" />
     <Compile Include="Services\PersistenceService.fs" />
     <Compile Include="Services\ViewModelConverter.fs" />

@@ -5,6 +5,7 @@ open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Hosting
+open ITI.Connect4.Models
 open ITI.Connect4.Services
 
 type Startup private () =
@@ -17,23 +18,9 @@ type Startup private () =
         // Add framework services.
         services
             .AddMemoryCache()
-            .AddSingleton<GameManagerDependency>({
-                CreateNewBoardState = GameManager.createNewBoardState
-                PutChip = GameManager.putChip
-                EvaluateBoad = GameManager.evaluateBoard
-            })
-            .AddSingleton<PersistenceServiceDependency>({
-                Get = PersistenceService.get
-                Exist = PersistenceService.exist
-                Set = PersistenceService.set
-            })
-            .AddSingleton<ViewModelConverterDependency>({
-                PlayerAsViewModel = ViewModelConverter.playerAsViewModel
-                BoardStateAsViewModel = ViewModelConverter.boardStateAsViewModel
-                GameIdentifierAsViewModel = ViewModelConverter.gameIdentifierAsViewModel
-                GameStateAsViewModel = ViewModelConverter.gameStateAsViewModel
-                PlayerFromViewModel = ViewModelConverter.playerFromViewModel
-            })
+            .AddSingleton<IGameManager, GameManager>()
+            .AddSingleton<IPersistenceService, PersistenceService>()
+            .AddSingleton<IViewModelConverter, ViewModelConverter>()
             .AddControllers()
         |> ignore
 
