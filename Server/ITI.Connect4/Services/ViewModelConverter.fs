@@ -1,12 +1,12 @@
 ﻿namespace ITI.Connect4.Services
 
-open System
 open ITI.Connect4.Models
 
 type ViewModelConverterDependency = {
     PlayerAsViewModel : Player -> PlayerViewModel
     BoardStateAsViewModel : BoardState -> BoardStateViewModel
     GameIdentifierAsViewModel : GameIdentifier -> GameIdentifierViewModel
+    GameStateAsViewModel : GameState -> GameStateViewModel
 
     PlayerFromViewModel : PlayerViewModel -> Result<Player, string>
 }
@@ -18,7 +18,7 @@ module ViewModelConverter =
         | Red -> "Red"
 
     let boardStateAsViewModel ({ Board = board; Turn = turn } : BoardState) : BoardStateViewModel =
-        let boardViewModel =
+        { Board =
             board
             |> Seq.map (fun column ->
                 column
@@ -29,11 +29,18 @@ module ViewModelConverter =
                 |> Seq.rev
                 |> Seq.toArray)
             |> Seq.toArray
-
-        { Board = boardViewModel; Turn = turn |> playerAsViewModel }
+          Turn =
+            turn |> playerAsViewModel }
 
     let gameIdentifierAsViewModel (identifier: GameIdentifier) : GameIdentifierViewModel =
         { Id = (identifier.ToString()) }
+
+    let gameStateAsViewModel (gameState: GameState) : GameStateViewModel =
+        { GameState =
+            match gameState with
+            | Win player -> sprintf "Winner %s" (match player with Red -> "Red" | Yellow -> "Yellow")
+            | Draw -> "Draw"
+            | Running -> "Running" }
 
     let playerFromViewModel (playerViewModel: PlayerViewModel) : Result<Player, string> =
         match playerViewModel with

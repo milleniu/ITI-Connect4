@@ -6,3 +6,4 @@ type BoardViewModel = BoardColumnViewModel array
 type PlayerViewModel = string
 type BoardStateViewModel = { Board: BoardViewModel; Turn: PlayerViewModel }
 type GameIdentifierViewModel = { Id: string }
+type GameStateViewModel = { GameState: string }

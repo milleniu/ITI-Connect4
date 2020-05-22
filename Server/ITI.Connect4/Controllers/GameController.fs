@@ -86,7 +86,7 @@ type Connect4Controller ( logger : ILogger<Connect4Controller>,
         match putChipPipeline with
         | Ok gameState ->
             logger.LogTrace (sprintf "Game %s:: Player %s played in column %d" (id.ToString()) player column)
-            gameState |> __.Ok :> IActionResult
+            gameState |> converter.GameStateAsViewModel |> __.Ok :> IActionResult
         | Error e ->
             logger.LogError e
             e |> __.BadRequest :> IActionResult

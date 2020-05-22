@@ -31,6 +31,7 @@ type Startup private () =
                 PlayerAsViewModel = ViewModelConverter.playerAsViewModel
                 BoardStateAsViewModel = ViewModelConverter.boardStateAsViewModel
                 GameIdentifierAsViewModel = ViewModelConverter.gameIdentifierAsViewModel
+                GameStateAsViewModel = ViewModelConverter.gameStateAsViewModel
                 PlayerFromViewModel = ViewModelConverter.playerFromViewModel
             })
             .AddControllers()
