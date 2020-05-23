@@ -23,7 +23,9 @@ type ViewModelConverter () =
                     |> Seq.toArray)
                 |> Seq.toArray
               Turn =
-                turn |> (__ :> IViewModelConverter).PlayerAsViewModel }
+                match turn with
+                | Some turn -> turn |> (__ :> IViewModelConverter).PlayerAsViewModel
+                | _ -> "" }
 
         member __.GameIdentifierAsViewModel (GameIdentifier gameIdentifier) : GameIdentifierViewModel =
             { Id = (gameIdentifier.ToString("N")) }

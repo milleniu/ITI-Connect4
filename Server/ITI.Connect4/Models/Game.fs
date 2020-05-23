@@ -10,7 +10,7 @@ type Player = Red | Yellow
 type BoardCell = Player option
 type BoardColumn = BoardCell array
 type Board = BoardColumn array
-type BoardState = { Board: Board; Turn: Player }
+type BoardState = { Board: Board; Turn: Player option }
 
 type GameIdentifier = GameIdentifier of Guid
 type GameState = Running | Draw | Win of Player

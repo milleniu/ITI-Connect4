@@ -7,7 +7,7 @@ type GameManager () =
     interface IGameManager with
         member __.CreateNewBoardState (startingPlayer: Player) : BoardState = 
             { Board = Array.create Constants.BoardWidth ( Array.create Constants.BoardHeight None );
-              Turn = startingPlayer }
+              Turn = Some startingPlayer }
 
         member __.PutChip (board: Board) (player: Player) (column: Column) : Result<Board, string> =
             let validateColumn column =
