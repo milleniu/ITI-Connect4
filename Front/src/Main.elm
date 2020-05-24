@@ -11,10 +11,6 @@ import Json.Decode exposing (Decoder, field, string)
 
 -- INTERNAL MODULES
 
--- todo: http request
-
--- import Styles exposing (..)
-
 main =
   Browser.element
     { init = init
@@ -37,11 +33,10 @@ type alias Model =
 
 init : () -> (Model, Cmd Msg)
 init _ = 
-  ( (createModel "-1"), getGame )
+  (createModel "-1", getGame )
 
 
 -- SUBSCRIPTIONS
-
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
@@ -80,7 +75,6 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
     NewGame -> 
-      Debug.log "Click"
       (createModel "", getGame)
     AddPawn column ->
       (model, putPlay model column)
@@ -88,7 +82,6 @@ update msg model =
     GetGame result -> 
       case result of
         Ok id -> 
-          Debug.log id
           ( createModel id, Cmd.none)
         Err _ -> ( addErrorModel model "Game error, restart a new game. (GetGame)" , Cmd.none)
     PutPlay result -> 
@@ -139,7 +132,7 @@ updateTurn model =
 
 humanize : Model -> String
 humanize model = 
-  if String.contains "Winner" model.gameState then
+  if String.contains "Winner" model.gameState || String.contains "Draw" model.gameState then
     model.gameState
   else
     "It' s " ++ caseString model.turn ++ " to play"
@@ -166,7 +159,7 @@ putPlayDecoder =
 getGame : Cmd Msg
 getGame =
   Http.post
-    { url = "/api/connect4/new" -- get game
+    { url = "/api/connect4/new"
     , body = Http.emptyBody
     , expect = Http.expectJson GetGame getGameDecoder
     }
