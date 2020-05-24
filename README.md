@@ -1,6 +1,6 @@
 # ITI-Connect4
 
-Sample functionnal programming project made during functionnal programming course at Intech school.
+Sample functional programming project made during functional programming course at Intech school.
 
 ## How to use
 
