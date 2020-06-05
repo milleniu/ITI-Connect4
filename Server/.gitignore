@@ -4,6 +4,7 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 /ITI.Connect4/*.Development.json
+/ITI.Connect4/wwwroot/
 
 # User-specific files
 *.rsuser

@@ -78,5 +78,8 @@ type GameManager () =
                 match (a, b) with
                 | (Win _ as win), _ -> win
                 | _, (Win _ as win) -> win
-                | _ -> if (board |> Seq.forall (fun col -> col |> Seq.forall Option.isSome)) then Draw else Running) Running
+                | (Draw _ as draw), _  -> draw
+                | _, (Draw _ as draw) -> draw
+                | _ -> Running)
+                (if (board |> Seq.forall (fun col -> col |> Seq.forall Option.isSome)) then Draw else Running)
             

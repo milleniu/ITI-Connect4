@@ -86,5 +86,3 @@ type Connect4Controller ( logger : ILogger<Connect4Controller>,
         | Error e ->
             logger.LogError e
             e |> __.BadRequest :> IActionResult
-
-            
