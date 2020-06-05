@@ -135,7 +135,7 @@ humanize model =
   if String.contains "Winner" model.gameState || String.contains "Draw" model.gameState then
     model.gameState
   else
-    "It' s " ++ caseString model.turn ++ " to play"
+    "It's " ++ caseString model.turn ++ " player turn"
 
 addErrorModel: Model -> String -> Model
 addErrorModel model err = 
@@ -205,7 +205,7 @@ view model =
     , div 
       [class "error"] [text model.error]
     , button
-      [ class "buttons", onClick NewGame ] [text "New Game" ]
+      [ class "button", onClick NewGame ] [text "New Game" ]
     , div 
       [ class "gridContainer"
       , style "display" "flex"
